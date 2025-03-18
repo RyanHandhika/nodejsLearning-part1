@@ -1,12 +1,30 @@
-// import contacts from "./contacts.js";
-import { tulisPertanyaan, simpanContact } from "./contacts.js";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import { simpanContact } from "./contacts.js";
 
-const main = async function () {
-  const name = await tulisPertanyaan("Masukkan nama anda : ");
-  const email = await tulisPertanyaan("Masukkan email anda : ");
-  const noHP = await tulisPertanyaan("Masukkan no HP anda : ");
-
-  simpanContact(name, email, noHP);
-};
-
-main();
+yargs(hideBin(process.argv))
+  .command({
+    command: "add",
+    describe: "add a new contact!",
+    builder: {
+      name: {
+        describe: "Full Name",
+        demandOption: true,
+        type: "string",
+      },
+      email: {
+        describe: "Email",
+        demandOption: false,
+        type: "string",
+      },
+      noHP: {
+        describe: "Phone Number",
+        demandOption: true,
+        type: "string",
+      },
+    },
+    handler(argv) {
+      simpanContact(argv.name, argv.email, argv.noHP);
+    },
+  })
+  .parse();
