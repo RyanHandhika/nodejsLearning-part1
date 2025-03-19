@@ -12,10 +12,15 @@ if (!fs.existsSync(dataPath)) {
   fs.writeFileSync(dataPath, "[]", "utf-8");
 }
 
-const simpanContact = (name, email, noHP) => {
-  const contact = { name, email, noHP };
+const loadContact = () => {
   const file = fs.readFileSync("data/contacts.json", "utf-8");
   const contacts = JSON.parse(file);
+  return contacts;
+};
+
+const simpanContact = (name, email, noHP) => {
+  const contact = { name, email, noHP };
+  const contacts = loadContact();
 
   // duplicate name check
   const duplicate = contacts.find((contact) => contact.name === name);
@@ -45,5 +50,51 @@ const simpanContact = (name, email, noHP) => {
   );
 };
 
+const listContact = () => {
+  const contacts = loadContact();
+  console.info(chalk.bold.bgGreen.black("Daftar nama & no hp contact : "));
+  contacts.forEach((contact, i) => {
+    console.info(`${i + 1}. ${contact.name} - ${contact.noHP}.`);
+  });
+};
+
+const contactDetails = (name) => {
+  const contacts = loadContact();
+
+  const contact = contacts.find(
+    (contact) => contact.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if (!contact) {
+    console.info(chalk.bold.bgRed.black("Name Not Found!"));
+    return false;
+  }
+
+  console.info(chalk.bold.bgCyan.black("Contact details : "));
+  console.info(`Name : ${contact.name}`);
+  console.info(`Phone Number : ${contact.noHP}`);
+  if (contact.email) {
+    console.info(`Email : ${contact.email}`);
+  }
+};
+
+const contactDelete = (name) => {
+  const contacts = loadContact();
+
+  const updatedContacts = contacts.filter(
+    (contact) => contact.name.toLowerCase() !== name.toLowerCase()
+  );
+
+  if (contacts.length === updatedContacts.length) {
+    console.info(chalk.bold.bgRed.black("Name Not Found!"));
+    return false;
+  }
+
+  fs.writeFileSync("data/contacts.json", JSON.stringify(updatedContacts));
+  console.info(
+    chalk.bold.bgBlue.black(`${name} contact deleted successfully!`)
+  );
+};
+
 // export default { tulisPertanyaan, simpanContact };
-export { simpanContact };
+export { simpanContact, listContact, contactDetails, contactDelete };
