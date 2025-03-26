@@ -20,8 +20,32 @@ const loadContact = () => {
 // cari contact berdasarkan nama
 const findContact = (name) => {
   const contacts = loadContact();
-  const contact = contacts.find((contact) => contact.name === name);
+  const contact = contacts.find(
+    (contact) => contact.name.toLowerCase() === name.toLowerCase()
+  );
   return contact;
 };
 
-export { loadContact, findContact };
+// menyimpan data kedalam file contacts.json
+const saveContacts = (contacts) => {
+  // JSON.stringify() = merubah objek menjadi json
+  // JSON.parse() = merubah json menjadi objek
+  fs.writeFileSync("data/contacts.json", JSON.stringify(contacts));
+};
+
+// menambahkan data baru & menimpa data di file contacts.json
+const addContact = (contact) => {
+  const contacts = loadContact();
+  contacts.push(contact);
+  saveContacts(contacts);
+};
+
+// cek nama yang duplikat
+const cekDuplikat = (name) => {
+  const contacts = loadContact();
+  return contacts.find(
+    (contact) => contact.name.toLowerCase() === name.toLowerCase()
+  );
+};
+
+export { loadContact, findContact, addContact, cekDuplikat };
