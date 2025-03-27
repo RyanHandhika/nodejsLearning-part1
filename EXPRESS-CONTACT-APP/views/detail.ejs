@@ -9,6 +9,18 @@
             <%= contact.noHP %>
           </h6>
           <p class="card-text"><%= contact.email %></p>
+          <a
+            href="/contact/edit/<%= contact.name  %>"
+            class="btn btn-primary badge"
+            >Ubah</a
+          >
+          <a
+            href="/contact/delete/<%= contact.name  %>"
+            class="btn btn-danger badge"
+            onclick="return confirm('Yakin?')"
+            >Hapus</a
+          >
+          <br />
           <a href="/contact" class="card-link"
             >&laquo; Kembali ke daftar contact</a
           >
