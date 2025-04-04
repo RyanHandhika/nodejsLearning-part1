@@ -10,7 +10,8 @@
 </div>
 <% } %>
 
-<form action="/contact/update" method="post">
+<form action="/contact?_method=PUT" method="post">
+  <input type="hidden" name="_id" value="<%= contact._id  %>" />
   <input
     type="hidden"
     name="oldName"

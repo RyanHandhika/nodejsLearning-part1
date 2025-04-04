@@ -127,38 +127,6 @@ app.get("/contact/edit/:name", (req, res) => {
   });
 });
 
-/// proses ubah data contact
-app.post(
-  "/contact/update",
-  [
-    body("name").custom((value, { req }) => {
-      const duplikat = cekDuplikat(value);
-      if (value !== req.body.oldName && duplikat) {
-        throw new Error("Name is already exist!");
-      }
-      return true;
-    }),
-    body("email", "Email invalid!").isEmail(),
-    body("noHP", "Phone number invalid").isMobilePhone("id-ID"),
-  ],
-  (req, res) => {
-    const result = validationResult(req);
-    if (result.isEmpty()) {
-      updateContacts(req.body);
-      // kirimkan flash message
-      req.flash("msg", "Contact is successfuly in updated!");
-      res.redirect("/contact");
-    } else {
-      res.render("edit-contact", {
-        title: "Halaman ubah",
-        layout: "layouts/main-layout",
-        errors: result.array(),
-        contact: req.body,
-      });
-    }
-  }
-);
-
 app.get("/contact/:name", (req, res) => {
   const contact = findContact(req.params.name);
   res.render("detail", {
